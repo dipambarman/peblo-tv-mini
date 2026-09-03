@@ -112,6 +112,16 @@ def validate_artwork(
             f"Please upload a higher quality version."
         )
 
+    # Check maximum resolution (reject "too big" images)
+    max_w = int(target_w * 1.5)
+    max_h = int(target_h * 1.5)
+    if width > max_w or height > max_h:
+        errors.append(
+            f"This image resolution is too high ({width}×{height} pixels). "
+            f"It should not exceed {max_w}×{max_h} pixels. "
+            f"Please resize the image before uploading."
+        )
+
     if errors:
         return False, errors, metadata
 
