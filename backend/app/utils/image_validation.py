@@ -102,6 +102,16 @@ def validate_artwork(
             f"and {spec['target_px'][1]}px tall."
         )
 
+    # Check minimum resolution (reject "tiny" images)
+    min_w = int(target_w * 0.5)
+    min_h = int(target_h * 0.5)
+    if width < min_w or height < min_h:
+        errors.append(
+            f"This image is too small ({width}×{height} pixels). "
+            f"It must be at least {min_w}×{min_h} pixels to look good on screen. "
+            f"Please upload a higher quality version."
+        )
+
     if errors:
         return False, errors, metadata
 
