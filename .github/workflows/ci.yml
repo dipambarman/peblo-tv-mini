@@ -40,7 +40,7 @@ jobs:
       - name: Lint with ruff
         run: |
           cd backend
-          ruff check .
+          python -m ruff check .
 
       - name: Run tests
         env:
@@ -52,7 +52,7 @@ jobs:
           SEED_ON_STARTUP: "false"
         run: |
           cd backend
-          pytest -v --tb=short
+          python -m pytest -v --tb=short
 
   frontend-cms:
     name: CMS — Lint & Build

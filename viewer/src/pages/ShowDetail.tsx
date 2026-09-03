@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { catalogApi } from '../api/catalog'
@@ -24,7 +24,7 @@ export default function ShowDetail() {
   }, [data, slug])
 
   // Set default active season when show loads
-  useMemo(() => {
+  useEffect(() => {
     if (show && activeSeason === null && show.seasons?.length > 0) {
       // Prefer a non-trailer season if available
       const normalSeason = show.seasons.find((s: any) => !s.is_trailer_season)
