@@ -103,8 +103,9 @@ def validate_artwork(
         )
 
     # Check minimum resolution (reject "tiny" images)
-    min_w = int(target_w * 0.5)
-    min_h = int(target_h * 0.5)
+    target_px_w, target_px_h = spec["target_px"]
+    min_w = int(target_px_w * 0.5)
+    min_h = int(target_px_h * 0.5)
     if width < min_w or height < min_h:
         errors.append(
             f"This image is too small ({width}×{height} pixels). "
@@ -113,8 +114,8 @@ def validate_artwork(
         )
 
     # Check maximum resolution (reject "too big" images)
-    max_w = int(target_w * 1.5)
-    max_h = int(target_h * 1.5)
+    max_w = int(target_px_w * 1.5)
+    max_h = int(target_px_h * 1.5)
     if width > max_w or height > max_h:
         errors.append(
             f"This image resolution is too high ({width}×{height} pixels). "
