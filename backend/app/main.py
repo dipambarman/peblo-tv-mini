@@ -1,5 +1,6 @@
 """Peblo TV Mini — FastAPI application entry point."""
 import logging
+import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -55,10 +56,10 @@ app.add_middleware(
 )
 
 # Mount static file serving for local storage
-import os
 storage_path = settings.STORAGE_LOCAL_PATH
 if not os.path.exists(storage_path):
-    os.makedirs(storage_path, exist_ok=True)
+    os.makedirs(storage_path)
+
 app.mount("/static/storage", StaticFiles(directory=storage_path), name="storage")
 
 # Register routers

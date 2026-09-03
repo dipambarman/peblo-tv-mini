@@ -33,8 +33,11 @@ async def publish(
     """
     # Check if there are blocking issues
     report = await build_validation_report(db)
-
-    # We allow publishing even with warnings, but block on errors
+    if not report.publishable:
+        raise HTTPException(
+            status_code=400,
+            detail="Cannot publish due to blocking validation errors."
+        )
     # (Note: the challenge says validation report should SURFACE issues,
     #  but doesn't say publish must be blocked. We block on errors for safety.)
     # Actually, re-reading: we publish what IS valid. Shows with issues are excluded.

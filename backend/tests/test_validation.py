@@ -1,4 +1,3 @@
-import pytest
 from app.utils.image_validation import validate_artwork
 from io import BytesIO
 from PIL import Image

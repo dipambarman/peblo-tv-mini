@@ -1,8 +1,7 @@
 """Episodes CRUD router."""
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
-from sqlalchemy.orm import selectinload
 from app.database import get_db
 from app.models.show import Show
 from app.models.season import Season

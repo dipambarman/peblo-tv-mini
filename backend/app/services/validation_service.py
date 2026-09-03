@@ -1,11 +1,9 @@
 """Validation service — surfaces everything currently blocking publish."""
-import re
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
 from app.models.show import Show
 from app.models.episode import Episode
-from app.models.artwork import Artwork
 from app.schemas.publish import ValidationIssue, ValidationReportResponse
 
 # Valid values from reference.json
@@ -159,7 +157,6 @@ async def build_validation_report(db: AsyncSession) -> ValidationReportResponse:
         ))
 
     publishable = len(blocking) == 0
-    total_issues = len(blocking) + len(warnings)
     summary = (
         f"{'✅ Ready to publish!' if publishable else '❌ Cannot publish.'} "
         f"{len(blocking)} blocking issue(s), {len(warnings)} warning(s)."

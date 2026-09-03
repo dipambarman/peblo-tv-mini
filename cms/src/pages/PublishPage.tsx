@@ -2,6 +2,21 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { publishApi } from '../api/client'
 import { useState } from 'react'
 
+interface ValidationIssue {
+  show: string
+  episode?: string
+  issue: string
+}
+
+interface PublishRun {
+  id: string
+  status: string
+  started_at: string
+  shows_count: number
+  episodes_count: number
+  error_message?: string
+}
+
 export default function PublishPage() {
   const queryClient = useQueryClient()
   const user = JSON.parse(localStorage.getItem('user') || '{}')
@@ -76,8 +91,8 @@ export default function PublishPage() {
           <div style={{ marginTop: 12, fontSize: 14, color: 'var(--text-secondary)' }}>
             <strong>Why publish is disabled:</strong>
             <ul style={{ marginTop: 4, paddingLeft: 20 }}>
-              {report.blocking_issues.slice(0, 3).map((issue: Record<string, unknown>, i: number) => (
-                <li key={i}>{issue.issue as string}</li>
+              {report.blocking_issues.slice(0, 3).map((issue: ValidationIssue, i: number) => (
+                <li key={i}>{issue.issue}</li>
               ))}
               {report.blocking_issues.length > 3 && (
                 <li>...and {report.blocking_issues.length - 3} more</li>
@@ -112,13 +127,13 @@ export default function PublishPage() {
             <h4 style={{ color: 'var(--error)', marginBottom: 8 }}>
               ❌ Blocking Issues ({report.blocking_issues.length})
             </h4>
-            {report.blocking_issues.map((issue: Record<string, unknown>, i: number) => (
+            {report.blocking_issues.map((issue: ValidationIssue, i: number) => (
               <div key={i} className="validation-issue error">
                 <span className="issue-icon">🚫</span>
                 <div className="issue-text">
-                  <div className="issue-show">{issue.show as string}</div>
-                  {(issue.episode as string) && <div className="issue-episode">{issue.episode as string}</div>}
-                  <div>{issue.issue as string}</div>
+                  <div className="issue-show">{issue.show}</div>
+                  {issue.episode && <div className="issue-episode">{issue.episode}</div>}
+                  <div>{issue.issue}</div>
                 </div>
               </div>
             ))}
@@ -130,13 +145,13 @@ export default function PublishPage() {
             <h4 style={{ color: 'var(--warning)', marginBottom: 8 }}>
               ⚠️ Warnings ({report.warnings.length})
             </h4>
-            {report.warnings.map((issue: Record<string, unknown>, i: number) => (
+            {report.warnings.map((issue: ValidationIssue, i: number) => (
               <div key={i} className="validation-issue warning">
                 <span className="issue-icon">⚠️</span>
                 <div className="issue-text">
-                  <div className="issue-show">{issue.show as string}</div>
-                  {(issue.episode as string) && <div className="issue-episode">{issue.episode as string}</div>}
-                  <div>{issue.issue as string}</div>
+                  <div className="issue-show">{issue.show}</div>
+                  {issue.episode && <div className="issue-episode">{issue.episode}</div>}
+                  <div>{issue.issue}</div>
                 </div>
               </div>
             ))}
@@ -153,21 +168,21 @@ export default function PublishPage() {
             <p>No publishes yet.</p>
           </div>
         ) : (
-          history.map((run: Record<string, unknown>) => (
-            <div key={run.id as string} className="publish-history-item">
+          history.map((run: PublishRun) => (
+            <div key={run.id} className="publish-history-item">
               <div className={`run-status ${run.status}`} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 500 }}>
                   {run.status === 'success' ? '✅' : run.status === 'failed' ? '❌' : '⏳'}{' '}
-                  {new Date(run.started_at as string).toLocaleString()}
+                  {new Date(run.started_at).toLocaleString()}
                 </div>
                 <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
-                  {run.shows_count as number} shows, {run.episodes_count as number} episodes
-                  {(run.error_message as string) && ` · Error: ${run.error_message as string}`}
+                  {run.shows_count} shows, {run.episodes_count} episodes
+                  {run.error_message && ` · Error: ${run.error_message}`}
                 </div>
               </div>
               <span className={`badge badge-${run.status === 'success' ? 'published' : run.status === 'failed' ? 'error' : 'draft'}`}>
-                {run.status as string}
+                {run.status}
               </span>
             </div>
           ))

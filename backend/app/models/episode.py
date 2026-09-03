@@ -2,8 +2,7 @@
 import uuid
 from datetime import datetime, timezone
 from sqlalchemy import (
-    String, Integer, ForeignKey, DateTime, Text,
-    UniqueConstraint, Index,
+    String, Integer, ForeignKey, DateTime, UniqueConstraint, Index,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base

@@ -79,8 +79,7 @@ async def search_catalogue(
 
     # Text search: match show title, episode title, or category
     if q:
-        from sqlalchemy import cast, String
-        from sqlalchemy.dialects.postgresql import JSONB as PG_JSONB
+        from sqlalchemy import String
         query = query.where(
             or_(
                 Show.title.ilike(f"%{q}%"),
