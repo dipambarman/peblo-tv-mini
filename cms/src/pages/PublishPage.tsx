@@ -117,7 +117,7 @@ export default function PublishPage() {
                 <span className="issue-icon">🚫</span>
                 <div className="issue-text">
                   <div className="issue-show">{issue.show as string}</div>
-                  {issue.episode && <div className="issue-episode">{issue.episode as string}</div>}
+                  {(issue.episode as string) && <div className="issue-episode">{issue.episode as string}</div>}
                   <div>{issue.issue as string}</div>
                 </div>
               </div>
@@ -135,7 +135,7 @@ export default function PublishPage() {
                 <span className="issue-icon">⚠️</span>
                 <div className="issue-text">
                   <div className="issue-show">{issue.show as string}</div>
-                  {issue.episode && <div className="issue-episode">{issue.episode as string}</div>}
+                  {(issue.episode as string) && <div className="issue-episode">{issue.episode as string}</div>}
                   <div>{issue.issue as string}</div>
                 </div>
               </div>
@@ -162,8 +162,8 @@ export default function PublishPage() {
                   {new Date(run.started_at as string).toLocaleString()}
                 </div>
                 <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
-                  {run.shows_count} shows, {run.episodes_count} episodes
-                  {run.error_message && ` · Error: ${run.error_message}`}
+                  {run.shows_count as number} shows, {run.episodes_count as number} episodes
+                  {(run.error_message as string) && ` · Error: ${run.error_message as string}`}
                 </div>
               </div>
               <span className={`badge badge-${run.status === 'success' ? 'published' : run.status === 'failed' ? 'error' : 'draft'}`}>
