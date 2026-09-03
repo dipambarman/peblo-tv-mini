@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: peblo_tv
+      POSTGRES_USER: peblo
+      POSTGRES_PASSWORD: peblo_secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U peblo -d peblo_tv"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://peblo:peblo_secret@db:5432/peblo_tv
+      DATABASE_URL_SYNC: postgresql://peblo:peblo_secret@db:5432/peblo_tv
+      STORAGE_BACKEND: local
+      STORAGE_LOCAL_PATH: /app/storage
+      STORAGE_SERVE_URL: http://localhost:8000/static/storage
+      JWT_SECRET: dev-secret-change-in-production
+      SEED_ON_STARTUP: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - api_storage:/app/storage
+
+  cms:
+    build: ./cms
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
+
+  viewer:
+    build: ./viewer
+    ports:
+      - "5174:80"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
+  api_storage:
